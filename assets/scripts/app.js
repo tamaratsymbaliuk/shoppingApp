@@ -23,7 +23,12 @@ class ElementAttribute {
 class Component {
     constructor(renderHookId) {
         this.hookId = renderHookId;
+        this.render(); // used the render method of subclasses
     }
+
+    render() {}
+
+
     createRootElement(tag, cssClasses, attributes) {
         const rootElement = document.createElement(tag);
         if (cssClasses) {
@@ -118,18 +123,23 @@ class ProductList extends Component {
  render() {  
     this.createRootElement('ul', 'product-list', [new ElementAttribute('id', 'prod-list')]);
     for (const prod of this.products) {
-        const productItem = new ProductItem(prod, 'prod-list');
-        productItem.render(); // calling render() on each ProductItem, appending the result to the <ul> list.
+        new ProductItem(prod, 'prod-list');
+        //const productItem = new ProductItem(prod, 'prod-list');
+       // productItem.render(); // calling render() on each ProductItem, appending the result to the <ul> list.
     }
  }
 }
 
 class Shop { // our app
+
+    constructor() {
+        this.render();
+    }
+
+
     render() {           
     this.cart = new ShoppingCart('app'); // so it's a property of Shop
-    this.cart.render();   
-    const productList = new ProductList('app');
-    productList.render();
+    new ProductList('app');
    }
 }
 
@@ -138,7 +148,6 @@ class App {
 
     static init() {
         const shop = new Shop();
-        shop.render();
         this.cart = shop.cart; // Assigns shop.cart to App.cart
     }
 
