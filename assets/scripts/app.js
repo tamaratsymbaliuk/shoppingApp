@@ -21,9 +21,11 @@ class ElementAttribute {
 }
 
 class Component {
-    constructor(renderHookId) {
+    constructor(renderHookId, shouldRender = true) {
         this.hookId = renderHookId;
-        this.render(); // used the render method of subclasses
+        if (shouldRender) {
+            this.render(); // used the render method of subclasses
+        }
     }
 
     render() {}
@@ -83,8 +85,9 @@ class ShoppingCart extends Component {
 // Represents a single product item in the list
 class ProductItem extends Component {
     constructor(product, renderHookId) {
-        super(renderHookId);
+        super(renderHookId, false);
         this.product = product;
+        this.render();
     }
 
     addToCart() {
@@ -111,24 +114,38 @@ class ProductItem extends Component {
 }
 
 class ProductList extends Component {
-     products = [
-        new Product('A Pillow', 'https://www.ikea.com/us/en/images/products/lapptatel-pillow-side-back-sleeper__0789272_pe763901_s5.jpg','a soft pillow!', 55.99),
-        new Product('A Carpet','https://carpet-rug.org/wp-content/uploads/2018/06/macro-2573557_1920-1024x576.jpg', 'a carpet you will like!', 155.99,)
- ];
+     products = [];
 
  constructor(renderHookId) {
      super(renderHookId);
+     this.fetchProducts();
  }
 
- render() {  
-    this.createRootElement('ul', 'product-list', [new ElementAttribute('id', 'prod-list')]);
-    for (const prod of this.products) {
+ fetchProducts() {
+     this.products = [
+        new Product('A Pillow', 'https://www.ikea.com/us/en/images/products/lapptatel-pillow-side-back-sleeper__0789272_pe763901_s5.jpg','a soft pillow!', 55.99),
+        new Product('A Carpet','https://carpet-rug.org/wp-content/uploads/2018/06/macro-2573557_1920-1024x576.jpg', 'a carpet you will like!', 155.99,)
+     ];
+
+     this.renderProducts();
+ }
+
+ renderProducts() {
+     for (const prod of this.products) {
         new ProductItem(prod, 'prod-list');
         //const productItem = new ProductItem(prod, 'prod-list');
        // productItem.render(); // calling render() on each ProductItem, appending the result to the <ul> list.
-    }
  }
 }
+
+ render() {  
+    this.createRootElement('ul', 'product-list', [new ElementAttribute('id', 'prod-list')]);
+    if (this.products && this.products.length > 0) {
+        this.renderProducts();
+    }  
+  }
+ }
+
 
 class Shop { // our app
 
