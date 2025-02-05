@@ -71,12 +71,19 @@ class ShoppingCart extends Component {
         this.cartItems = updatedItems;
     }
 
+    orderProducts() {
+        console.log('Ordering...');
+        console.log(this.items);
+    }
+
     render() {
         const cartEl = this.createRootElement('section', 'cart');
         cartEl.innerHTML = ` 
           <h2>Total: \$${0}</h2>
           <button>Order Now!</button>
         `;
+        const orderButton = cartEl.querySelector('button');
+        orderButton.addEventListener('click', () => this.orderProducts()); // wraping in the arrow function ensures this is not reffered to the button
         // creating new property for ShoppingCart class to store and render Total, can be created inside function 
         this.totalOutput = cartEl.querySelector('h2'); // only returns first h2 tag it finds <h2>Total: \$${0}</h2>
     }
@@ -114,15 +121,16 @@ class ProductItem extends Component {
 }
 
 class ProductList extends Component {
-     products = [];
+     #products = [];
 
  constructor(renderHookId) {
-     super(renderHookId);
+     super(renderHookId, false);
+     this.render();
      this.fetchProducts();
  }
 
  fetchProducts() {
-     this.products = [
+     this.#products = [
         new Product('A Pillow', 'https://www.ikea.com/us/en/images/products/lapptatel-pillow-side-back-sleeper__0789272_pe763901_s5.jpg','a soft pillow!', 55.99),
         new Product('A Carpet','https://carpet-rug.org/wp-content/uploads/2018/06/macro-2573557_1920-1024x576.jpg', 'a carpet you will like!', 155.99,)
      ];
@@ -131,7 +139,7 @@ class ProductList extends Component {
  }
 
  renderProducts() {
-     for (const prod of this.products) {
+     for (const prod of this.#products) {
         new ProductItem(prod, 'prod-list');
         //const productItem = new ProductItem(prod, 'prod-list');
        // productItem.render(); // calling render() on each ProductItem, appending the result to the <ul> list.
@@ -140,7 +148,7 @@ class ProductList extends Component {
 
  render() {  
     this.createRootElement('ul', 'product-list', [new ElementAttribute('id', 'prod-list')]);
-    if (this.products && this.products.length > 0) {
+    if (this.#products && this.#products.length > 0) {
         this.renderProducts();
     }  
   }
