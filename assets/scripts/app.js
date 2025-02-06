@@ -9,7 +9,6 @@ class Product {
         this.imageUrl = image;
         this.description = desc;
         this.price = price;
-
     }
 }
 
