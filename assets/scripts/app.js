@@ -11,14 +11,12 @@ class Product {
         this.price = price;
     }
 }
-
 class ElementAttribute {
     constructor(attrName, attrValue) {
         this.name = attrName;
         this.value = attrValue;
     }
 }
-
 class Component {
     constructor(renderHookId, shouldRender = true) {
         this.hookId = renderHookId;
@@ -28,7 +26,6 @@ class Component {
     }
 
     render() {}
-
 
     createRootElement(tag, cssClasses, attributes) {
         const rootElement = document.createElement(tag);
